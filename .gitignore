@@ -2,5 +2,8 @@
 /.vscode
 /test_videos
 /Frames/*
+/Posted_Frames/*
 
+config_.ini
 log.txt
+test.py

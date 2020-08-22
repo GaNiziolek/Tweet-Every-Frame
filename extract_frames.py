@@ -4,11 +4,6 @@ from time import sleep
 from pathlib import Path
 
 try:
-    import tweepy
-except ModuleNotFoundError:
-    os.system("pip install tweepy")
-
-try:
     import cv2
 except ModuleNotFoundError:
     os.system("pip install opencv-python")
@@ -32,7 +27,9 @@ def main():
         cap = cv2.VideoCapture(str(video_Path))
 
 
-        cap_fps = int(round(cap.get(cv2.CAP_PROP_FPS)))
+        cap_fps = int(cap.get(cv2.CAP_PROP_FPS))
+
+        qtd_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
         if cap_fps == 0:
             print('Vídeo inválido ou não foi possível ler o arquivo.')
@@ -42,6 +39,8 @@ def main():
     while True:
         clear_console()
         print(f'O frame rate do video é {cap_fps} fps')
+        print(f'O video possui {qtd_frames} frames')
+        print(f'O video possui {int(qtd_frames / cap_fps)} segundos')
         try:
             takes_by_second = int(input('quantos frames deseja extrair por segundo?\n'))
             break
@@ -78,12 +77,12 @@ def main():
         if frame_pos == 1 and frame_num % (cap_fps / takes_by_second) == 0:
             cont_time += 1
             print(f'Salvando frame {frame_num} do segundo: {cont_time}')
-            cv2.imwrite(f'Frames/{video_Name} ; {cont_time}.jpg', frame)
+            cv2.imwrite(f'Frames/{video_Name} ; {cont_time} ; {int(qtd_frames / cap_fps)}.jpg', frame)
 
         if frame_pos == 2 and ((frame_num + (cap_fps / 2)) % (cap_fps / takes_by_second)) == 0:
             cont_time += 1
             print(f'Salvando frame {frame_num} do segundo: {cont_time}')
-            cv2.imwrite(f'Frames/{video_Name} ; {cont_time}.jpg', frame)
+            cv2.imwrite(f'Frames/{video_Name} ; {cont_time} ; {int(qtd_frames / cap_fps)}.jpg', frame)
 
     print('Tudo pronto!')
     print(f'Foram criadas {cont_time} imagens na pasta Frames')
